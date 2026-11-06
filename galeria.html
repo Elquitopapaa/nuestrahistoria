@@ -1,0 +1,626 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nuestros recuerdos ♡</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #f5f1e9;
+    color: #51483f;
+    font-family: Georgia, serif;
+}
+
+header {
+    text-align: center;
+    padding: 45px 20px 25px;
+}
+
+header h1 {
+    font-size: 42px;
+    font-weight: normal;
+    font-style: italic;
+    color: #66574e;
+}
+
+header p {
+    color: #8c7c70;
+    font-size: 17px;
+}
+
+.boton-volver {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 11px 22px;
+    background: #e8dfd4;
+    color: #65554b;
+    border-radius: 30px;
+    text-decoration: none;
+    transition: .2s;
+}
+
+.boton-volver:hover {
+    background: #dcd0c3;
+}
+
+.galeria {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 40px;
+    padding: 45px;
+    max-width: 1500px;
+    margin: auto;
+}
+
+.polaroid {
+    background: #fff;
+    padding: 12px 12px 25px;
+    box-shadow: 0 7px 20px rgba(70,50,35,.13);
+    cursor: pointer;
+    transition: transform .3s, box-shadow .3s;
+    transform: rotate(-1deg);
+}
+
+.polaroid:nth-child(even) {
+    transform: rotate(1.5deg);
+}
+
+.polaroid:hover {
+    transform: rotate(0) translateY(-5px);
+    box-shadow: 0 12px 28px rgba(70,50,35,.2);
+}
+
+.polaroid img {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+    display: block;
+    background: #eee;
+}
+
+.pie {
+    text-align: center;
+    font-size: 19px;
+    padding-top: 22px;
+    color: #726258;
+    font-style: italic;
+}
+
+/* VIDEOS COMO POLAROID */
+
+.polaroid-video {
+    cursor: default;
+}
+
+.polaroid-video video {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+    display: block;
+    background: #000;
+}
+
+.polaroid-video .pie {
+    text-align: center;
+    font-size: 19px;
+    padding-top: 22px;
+    color: #726258;
+    font-style: italic;
+}
+
+#visor {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(25,20,18,.88);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    padding: 25px;
+}
+
+#visor.abierto {
+    display: flex;
+}
+
+#visor img {
+    max-width: 95%;
+    max-height: 85vh;
+    border: 12px solid white;
+    border-bottom-width: 35px;
+    box-shadow: 0 15px 50px #0005;
+}
+
+#cerrar {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    font-size: 35px;
+    cursor: pointer;
+    color: white;
+}
+
+footer {
+    text-align: center;
+    padding: 45px;
+    font-size: 22px;
+    color: #9b8778;
+}
+
+/* FINAL */
+
+.final {
+    max-width: 700px;
+    margin: 80px auto;
+    padding: 45px 25px;
+    background: #fffaf5;
+    border: 1px solid #eadbd4;
+    border-radius: 30px;
+    box-shadow: 0 12px 35px rgba(100,60,50,.12);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.final .decoracion {
+    font-size: 55px;
+    margin-bottom: 15px;
+}
+
+.final h2 {
+    font-weight: normal;
+    font-style: italic;
+    font-size: 32px;
+    color: #b66b82;
+}
+
+.final p {
+    line-height: 1.8;
+    color: #89766d;
+    font-size: 17px;
+}
+
+.boton {
+    border: none;
+    padding: 14px 25px;
+    border-radius: 30px;
+    font-size: 17px;
+    font-family: Georgia, serif;
+    cursor: pointer;
+    transition: .25s;
+    margin: 10px;
+}
+
+.boton-audio {
+    background: #ead0d8;
+    color: #87566a;
+}
+
+.boton-audio:hover {
+    background: #dfbac8;
+    transform: scale(1.04);
+}
+
+.boton-si {
+    background: #d987a1;
+    color: white;
+}
+
+.boton-si:hover {
+    background: #c96d8b;
+    transform: scale(1.06);
+}
+
+.boton-no {
+    background: #e9e1dc;
+    color: #75645d;
+}
+
+#zonaBotones {
+    position: relative;
+    height: 110px;
+    max-width: 400px;
+    margin: 20px auto 0;
+}
+
+#respuesta {
+    display: none;
+    margin-top: 30px;
+    color: #b66b82;
+    font-size: 23px;
+    line-height: 1.8;
+    animation: aparecer 1s ease;
+}
+
+#respuesta .corazon {
+    font-size: 45px;
+    display: block;
+    margin-top: 15px;
+}
+
+@keyframes aparecer {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media(max-width:600px) {
+    .galeria {
+        grid-template-columns: repeat(2,minmax(0,1fr));
+        gap: 20px 12px;
+        padding: 20px 12px;
+    }
+
+    .polaroid {
+        padding: 8px 8px 15px;
+    }
+
+    .polaroid img,
+    .polaroid-video video {
+        height: 180px;
+    }
+
+    .pie,
+    .polaroid-video .pie {
+        font-size: 14px;
+        padding-top: 15px;
+    }
+
+    header h1 {
+        font-size: 32px;
+    }
+
+    .final {
+        margin: 50px 12px;
+        padding: 35px 18px;
+    }
+
+    .final h2 {
+        font-size: 27px;
+    }
+
+    #zonaBotones {
+        height: 130px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>Nuestros recuerdos ♡</h1>
+    <p>Pequeños momentos que guardamos para siempre.</p>
+
+    <a href="index.html" class="boton-volver">
+        ← Volver a nuestra historia
+    </a>
+</header>
+
+<!-- GALERÍA -->
+
+<div class="galeria" id="galeria"></div>
+
+<!-- INVITACIÓN FINAL -->
+
+<section class="final">
+
+    <div class="decoracion">🍓 ♡ 🍓</div>
+
+    <h2>Y antes de irte...</h2>
+
+    <p>
+        Hay algo que me gustaría preguntarte.
+        <br>
+        Pero primero, escuchá esto...
+    </p>
+
+    <button class="boton boton-audio" id="botonAudio" onclick="reproducirAudio()">
+        ♡ Escuchar algo
+    </button>
+
+    <p id="estadoAudio" aria-live="polite" style="font-size:14px;margin-top:5px;"></p>
+
+    <audio id="audio" src="recuerdos/audio.mp3" preload="auto"></audio>
+
+    <p style="margin-top:35px;font-size:21px;color:#a66b77;">
+        ¿Podemos tomar el té de frutillas juntos? 🍓
+    </p>
+
+    <div id="zonaBotones">
+
+        <button class="boton boton-si" id="botonSi" onclick="aceptar()">
+            Sí 💗
+        </button>
+
+        <button class="boton boton-no" id="botonNo" onclick="escapar()">
+            No 🙈
+        </button>
+
+    </div>
+
+    <div id="respuesta">
+        Entonces tenemos una cita pendiente... 🍓
+        <br>
+        Un té, unas frutillas y una linda tarde, avisame.
+        <span class="corazon">♡</span>
+    </div>
+
+</section>
+
+<div id="visor" onclick="cerrarVisor()">
+    <span id="cerrar">✕</span>
+</div>
+
+<footer>Hecho con amor ♡</footer>
+
+<script>
+
+// FOTOS
+
+const fotos = [
+"77BF116C-2C70-44B4-A991-9F481E32A793.JPEG",
+"IMG_7264.JPEG",
+"IMG_7281.JPEG",
+"IMG_7456.JPEG",
+"IMG_7460.JPEG",
+"IMG_7461.JPEG",
+"IMG_7466.JPEG",
+"IMG_7477.JPEG",
+"IMG_7480.JPEG",
+"IMG_7481.JPEG",
+"IMG_7647.JPEG",
+"IMG_7650.JPEG",
+"IMG_7652.JPEG",
+"IMG_7659.JPEG",
+"IMG_7706.JPEG",
+"IMG_7708.JPEG",
+"IMG_7839.JPEG",
+"IMG_8156.JPEG",
+"IMG_8158.JPEG",
+"IMG_8159.JPEG",
+"IMG_8162.JPEG",
+"IMG_8169.JPEG",
+"IMG_8170.JPEG",
+"IMG_8171.JPEG",
+"IMG_8172.JPEG",
+"IMG_8176.JPEG",
+"IMG_8189.JPEG",
+"IMG_8254.JPEG",
+"IMG_8257.JPEG",
+"IMG_8264.JPEG",
+"IMG_8266.JPEG",
+"IMG_8269.JPEG",
+"IMG_8270.JPEG",
+"IMG_8272.JPEG",
+"IMG_8371.JPEG",
+"IMG_8374.JPEG",
+"IMG_8377.JPEG",
+"IMG_8379.JPEG",
+"IMG_8382.JPEG",
+"IMG_8388.JPEG",
+"IMG_8389.JPEG",
+"IMG_8427.JPEG",
+"IMG_8440.JPEG",
+"IMG_8442.JPEG",
+"IMG_8446.JPEG",
+"IMG_8450.JPEG",
+"IMG_8597.JPEG",
+"IMG_8598.JPEG"
+];
+
+// FRASES
+
+const frases = [
+"xio",
+"Ese instante.",
+"Qué linda la flor...",
+"Vos y yo.",
+"La misma vibra.",
+"Mi debilidad.",
+"Qué suerte la mía.",
+"Las próximas te suelto.",
+"Piquito.",
+"¡No te ves!",
+"Interesante.",
+"Infinitamente tuyo.",
+"¡Cómo me enamoraste!",
+"¿Cansarme?",
+"Aquella tarde.",
+"No te me escondas 🙏🏻",
+"Mi bandolera.",
+"Una linda casualidad.",
+"De esos días.",
+"Para siempre.",
+"No pueden elegir fotos.",
+"¿Sí te quiero?",
+"Obvio.",
+"Mi parte favorita.",
+"Un abrazo al alma.",
+"Mi persona favorita.",
+"Te llevo a todas partes ∞ ⚫",
+"¿Un mish más?",
+"No me olvido.",
+"¡Te vamos a sacar, Firulais!",
+"Arigato, chinita.",
+"Qué miedo.",
+"Tu coraje.",
+"Quedan pocas que iluminen...",
+"Entre nosotros.",
+"Como en casa.",
+"¿Estás tomando?",
+"Gorditos felices.",
+"Un mundo aparte.",
+"Simplemente... amo 🤍",
+"¿Cómo no presumirte?",
+"¿EEUU?",
+"De esos momentos.",
+"Todo vale.",
+"Felices así.",
+"Qué linda mujer.",
+"¿Por un beso?",
+"¿Me enfermo, y?"
+];
+
+// GALERÍA: FOTOS + VIDEOS
+
+const galeria = document.getElementById("galeria");
+
+fotos.forEach((nombre, indice) => {
+
+    const tarjeta = document.createElement("div");
+    tarjeta.className = "polaroid";
+
+    const imagen = document.createElement("img");
+    imagen.src = "recuerdos/" + nombre;
+    imagen.alt = frases[indice];
+    imagen.loading = "lazy";
+
+    imagen.onerror = () => {
+        tarjeta.style.display = "none";
+        console.warn("No se encontró:", nombre);
+    };
+
+    tarjeta.onclick = () => abrirFoto(imagen.src);
+
+    const pie = document.createElement("div");
+    pie.className = "pie";
+    pie.textContent = frases[indice];
+
+    tarjeta.appendChild(imagen);
+    tarjeta.appendChild(pie);
+    galeria.appendChild(tarjeta);
+
+    // VIDEO CORTO
+    if (indice === 9) {
+        const tarjetaVideo = document.createElement("div");
+        tarjetaVideo.className = "polaroid polaroid-video";
+
+        const video = document.createElement("video");
+        video.src = "recuerdos/video_corto.mp4";
+        video.controls = true;
+        video.preload = "metadata";
+        video.playsInline = true;
+        video.onclick = (e) => e.stopPropagation();
+
+        const pieVideo = document.createElement("div");
+        pieVideo.className = "pie";
+        pieVideo.textContent = "Un recuerdo en movimiento ♡";
+
+        tarjetaVideo.appendChild(video);
+        tarjetaVideo.appendChild(pieVideo);
+        galeria.appendChild(tarjetaVideo);
+    }
+
+    // VIDEO LARGO
+    if (indice === 9) {
+        const tarjetaVideoLargo = document.createElement("div");
+        tarjetaVideoLargo.className = "polaroid polaroid-video";
+
+        const videoLargo = document.createElement("video");
+        videoLargo.src = "recuerdos/video_largo.mp4";
+        videoLargo.controls = true;
+        videoLargo.preload = "metadata";
+        videoLargo.playsInline = true;
+        videoLargo.onclick = (e) => e.stopPropagation();
+
+        const pieVideoLargo = document.createElement("div");
+        pieVideoLargo.className = "pie";
+        pieVideoLargo.textContent = "Un recuerdo más largo, para volver a vivirlo ♡";
+
+        tarjetaVideoLargo.appendChild(videoLargo);
+        tarjetaVideoLargo.appendChild(pieVideoLargo);
+        galeria.appendChild(tarjetaVideoLargo);
+    }
+});
+
+// VISOR DE FOTOS
+
+const visor = document.getElementById("visor");
+
+function abrirFoto(ruta) {
+    visor.innerHTML = `
+        <span id="cerrar">✕</span>
+        <img src="${ruta}" onclick="event.stopPropagation()">
+    `;
+    visor.classList.add("abierto");
+}
+
+function cerrarVisor() {
+    visor.classList.remove("abierto");
+    visor.innerHTML = '<span id="cerrar">✕</span>';
+}
+
+document.addEventListener("keydown", e => {
+    if (e.key === "Escape") cerrarVisor();
+});
+
+// AUDIO
+
+const audio = document.getElementById("audio");
+const botonAudio = document.getElementById("botonAudio");
+const estadoAudio = document.getElementById("estadoAudio");
+
+function reproducirAudio() {
+    if (audio.paused) {
+        audio.play().then(() => {
+            botonAudio.textContent = "Ⅱ Pausar audio";
+            estadoAudio.textContent = "Reproduciendo ♡";
+        }).catch((error) => {
+            console.error("Error al reproducir:", error);
+            estadoAudio.textContent = "No se pudo reproducir. Comprobá que recuerdos/audio.mp3 exista.";
+        });
+    } else {
+        audio.pause();
+        botonAudio.textContent = "♡ Continuar escuchando";
+        estadoAudio.textContent = "Audio pausado";
+    }
+}
+
+audio.addEventListener("ended", () => {
+    botonAudio.textContent = "♡ Escuchar de nuevo";
+    estadoAudio.textContent = "♡";
+});
+
+audio.addEventListener("error", () => {
+    estadoAudio.textContent = "No se encontró recuerdos/audio.mp3";
+});
+
+// BOTÓN NO
+
+function escapar() {
+    const boton = document.getElementById("botonNo");
+    const zona = document.getElementById("zonaBotones");
+
+    const maxX = zona.clientWidth - boton.offsetWidth;
+    const maxY = zona.clientHeight - boton.offsetHeight;
+
+    boton.style.position = "absolute";
+    boton.style.left = Math.max(0, Math.random() * maxX) + "px";
+    boton.style.top = Math.max(0, Math.random() * maxY) + "px";
+}
+
+// BOTÓN SÍ
+
+function aceptar() {
+    document.getElementById("respuesta").style.display = "block";
+    document.getElementById("botonNo").style.display = "none";
+    document.getElementById("botonSi").style.display = "none";
+}
+
+</script>
+
+</body>
+</html>

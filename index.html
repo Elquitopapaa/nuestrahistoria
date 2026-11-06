@@ -1,0 +1,568 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Un regalo para vos ❤️</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Georgia, serif;
+    background: #fff3f7;
+    color: #74384f;
+    overflow-x: hidden;
+}
+
+.pantalla {
+    min-height: 100vh;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 25px;
+}
+
+h1 {
+    font-size: clamp(30px, 8vw, 44px);
+    font-weight: normal;
+}
+
+p {
+    font-size: 18px;
+    line-height: 1.7;
+}
+
+/* CORAZÓN INICIAL */
+
+#inicio {
+    transition: opacity 1s, transform 1s;
+}
+
+#corazon {
+    border: none;
+    background: none;
+    padding: 15px;
+    cursor: pointer;
+    transition: transform 0.4s;
+    -webkit-tap-highlight-color: transparent;
+}
+
+#corazon svg {
+    width: 110px;
+    height: 110px;
+    overflow: visible;
+}
+
+#forma {
+    fill: #bdbdbd;
+    transition: fill 0.5s;
+}
+
+#progreso {
+    width: 180px;
+    height: 7px;
+    background: #f0d6df;
+    border-radius: 20px;
+    overflow: hidden;
+    margin: 15px;
+}
+
+#barra {
+    height: 100%;
+    width: 0%;
+    background: #c34d7c;
+    transition: width 0.5s;
+}
+
+#contador {
+    font-size: 14px;
+}
+
+/* TRANSICIÓN */
+
+#transicion {
+    position: fixed;
+    inset: 0;
+    background: #c34d7c;
+    z-index: 10;
+    transform: scale(0);
+    border-radius: 50%;
+    transition: transform 1s ease-in;
+    pointer-events: none;
+}
+
+#transicion.activa {
+    transform: scale(3);
+    border-radius: 0;
+}
+
+/* ADVERTENCIA */
+
+#advertencia {
+    display: none;
+    opacity: 0;
+    transform: translateY(25px);
+    transition: opacity 1s, transform 1s;
+}
+
+#advertencia.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.tarjeta {
+    max-width: 520px;
+    padding: 35px 28px;
+    background: rgba(255,255,255,0.85);
+    border-radius: 25px;
+    box-shadow: 0 10px 40px #d9a7bc44;
+}
+
+.tarjeta h2 {
+    font-size: 28px;
+    font-weight: normal;
+}
+
+.tarjeta p {
+    font-size: 17px;
+}
+
+.boton {
+    border: none;
+    background: #c34d7c;
+    color: white;
+    padding: 15px 25px;
+    border-radius: 30px;
+    font-family: Georgia, serif;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: transform 0.3s, background 0.3s;
+}
+
+.boton:hover {
+    background: #a82e63;
+    transform: scale(1.05);
+}
+
+/* CARTA */
+
+#carta {
+    display: none;
+    opacity: 0;
+    transform: translateY(25px);
+    transition: opacity 1.2s, transform 1.2s;
+    align-items: flex-start;
+    justify-content: flex-start;
+    text-align: left;
+    padding: 30px 15px;
+}
+
+#carta.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.papel {
+    width: 100%;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: clamp(25px, 6vw, 55px);
+    background: rgba(255,255,255,0.85);
+    border-radius: 25px;
+    box-shadow: 0 10px 40px #d9a7bc33;
+}
+
+.papel h1 {
+    text-align: center;
+    margin-bottom: 35px;
+    font-size: clamp(28px, 6vw, 42px);
+}
+
+.papel h2 {
+    text-align: center;
+    font-size: 25px;
+    font-weight: normal;
+}
+
+.papel p {
+    font-size: 17px;
+    line-height: 1.9;
+    text-align: justify;
+    margin-bottom: 22px;
+}
+
+.papel .advertencia {
+    text-align: center;
+    font-size: 16px;
+    line-height: 1.8;
+}
+
+.separador {
+    text-align: center;
+    margin: 35px 0;
+    color: #c34d7c;
+    letter-spacing: 8px;
+}
+
+.final {
+    text-align: center !important;
+    font-size: 19px !important;
+}
+
+@media (max-width: 600px) {
+    #carta {
+        padding: 15px 10px;
+    }
+
+    .papel {
+        padding: 25px 20px;
+        border-radius: 20px;
+    }
+
+    .papel p {
+        font-size: 16px;
+        line-height: 1.85;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div id="transicion"></div>
+
+<!-- PANTALLA INICIAL -->
+
+<section id="inicio" class="pantalla">
+
+    <p>Hay algo que quiero regalarte...</p>
+    <h1>Un pequeño universo ❤️</h1>
+
+    <p id="mensaje">Tocá el corazón para comenzar</p>
+
+    <button id="corazon" aria-label="Llenar el corazón">
+        <svg viewBox="0 0 100 100">
+            <path id="forma"
+            d="M50 88 C40 78 5 53 5 29
+            C5 5 35 0 50 22
+            C65 0 95 5 95 29
+            C95 53 60 78 50 88 Z"/>
+        </svg>
+    </button>
+
+    <div id="progreso">
+        <div id="barra"></div>
+    </div>
+
+    <p id="contador">0 de 4</p>
+
+</section>
+
+<!-- TARJETA DE ADVERTENCIA -->
+
+<section id="advertencia" class="pantalla">
+
+    <div class="tarjeta">
+
+        <h2>⚠️ Abrir bajo tu propia responsabilidad</h2>
+
+        <p>
+            El contenido de esta carta puede provocar nostalgia,
+            sonrisas involuntarias y algún que otro «ay, señor».
+        </p>
+
+        <p>
+            Contiene sentimientos difíciles de explicar y una
+            cantidad preocupante de recuerdos que probablemente
+            solamente vos y yo entendamos.
+        </p>
+
+        <p>
+            Y eso que, a medida que iba escribiendo, me iban
+            apareciendo cada vez más recuerdos, como si uno
+            llevara a otro y así sucesivamente, jajaja.
+        </p>
+
+        <p>
+            Proceder con precaución. ❤️
+        </p>
+
+        <button id="abrirCarta" class="boton">
+            Bueno, ya me dio curiosidad
+        </button>
+
+    </div>
+
+</section>
+
+<!-- CARTA COMPLETA -->
+
+<section id="carta" class="pantalla">
+
+<div class="papel">
+
+<h1>Hay algo que quiero decirte… ❤️</h1>
+
+<p>
+Si estás leyendo esto, es porque en algún momento nuestros caminos volvieron a cruzarse y tuve la oportunidad de entregarte este pequeño regalo.
+</p>
+
+<p>
+Quiero que sepas que lo hice de corazón. Una tarde me encontré pensando en vos y sentí ganas de crear algo que pudiera guardar un poquito de todo lo que significaste y significás para mí.
+</p>
+
+<p>
+No hice todo esto para que me quieras más, lo hice porque quería que pudieras ver, aunque fuera un poquito, todo lo que yo te quiero. A veces siento que las palabras no me alcanzan para demostrarte cuánto cariño tengo por vos, y entonces se me ocurren estas cosas, guardar recuerdos, escribirte y preparar algo con mis propias manos. No para conseguir nada, sino porque me nace hacerlo.
+</p>
+
+<p>
+Te extraño muchísimo, Xio.
+</p>
+
+<p>
+Extraño tu compañía, nuestras conversaciones, tu manera de ser tan decidida y compañera, tu humor, tu belleza y hasta esa hermosa cara de culo que tantas veces me hacía sonreír.
+</p>
+
+<p>
+Extraño muchísimo tus abrazos, esos que me llegaban al pecho y en los que parecía que no quería soltarte nunca. Porque con vos me pasaba algo muy particular, después de cada beso quería otro beso, después de cada abrazo quería otro abrazo y después de cada despedida quería encontrar alguna excusa para despedirme una vez más y demorar un poquito más el momento de irme.
+</p>
+
+<p>
+Hay sensaciones que todavía no sé cómo explicar. Me acuerdo de cuando te llevaba a dar vueltas en la moto y de las ansias que tenía de sacar el carnet para poder hacerlo. No sabés cuánto esperaba ese momento, cuánto me ilusionaba la idea de compartir esas pequeñas aventuras con vos, porque entiendo nuestro gusto por las XR.
+</p>
+
+<p>
+Y después, aquel reencuentro que tuvimos durante unos días… No sé cómo describir lo que sentía cuando me abrazabas, esos abrazos en la moto, era una mezcla de felicidad, tranquilidad, gratitud y una satisfacción enorme de tenerte cerquita, de sentir que estabas ahí, abrazada a mí. A veces me faltan las palabras para explicar lo feliz que me hacían esos momentos.
+</p>
+
+<p>
+A veces siento que mis ojos eran una cámara que te sacaba miles de fotos cada segundo. No sé cómo explicarlo, pero había momentos en los que simplemente te miraba y quería guardar esa imagen para siempre. Quizás por eso tengo tantos recuerdos tuyos, incluso de cosas que en su momento parecían insignificantes.
+</p>
+
+<p>
+Me acuerdo de aquella primera merienda en la que te grabé mientras estabas con el celular. No sé exactamente qué estabas haciendo ni qué me dijiste cuando te diste cuenta de que te grababa, pero sí recuerdo algo, mientras te miraba pensaba que algún día ibas a ser mi futura mujer, y por eso quería guardar ese momento.
+</p>
+
+<p>
+También me acuerdo de aquella vez que estábamos hablando en el puerto y te conté que uno de mis sueños era que alguien me hiciera un TikTok con <em>I Wanna Be Yours</em>, de Arctic Monkeys. No sé si te acordás de esa conversación, pero yo sí me acuerdo perfectamente de lo que pasó después.
+</p>
+
+<p>
+Llegué a casa y me encontré con que me habías hecho justamente ese TikTok. No te imaginás lo que significó para mí, posta que me voló la cabeza. Me acuerdo de que ese día me largué a llorar, porque no era solamente un video, era ver cómo alguien había escuchado algo que yo deseaba y se había tomado el tiempo de hacerlo realidad. Fue uno de esos gestos que, por más pequeños que puedan parecer, se quedan guardados para siempre.
+</p>
+
+<p>
+Y hablando de recuerdos, no sé si te acordás de la primera vez que fui a tu casa. Me acuerdo perfectamente de cuando saliste por la puerta con Andre, tu mamá, y yo estaba ahí con mi gorra para atrás, una remera oversize y una bermuda, pensando «no, acá me van a linchar». Encima, como al principio no me hablabas mucho, yo ya estaba pensando que no querías verme o que no tenías ganas de hablar conmigo.
+</p>
+
+<p>
+Después terminamos sentados en la plaza, aunque creo que nos tuvimos que cambiar de lugar como tres veces porque las palomas nos estaban cagando, jajaja. No me acuerdo bien si te había cagado a vos o a mí, pero qué manera de arruinarnos la tranquilidad.
+</p>
+
+<p>
+Y también me acuerdo de aquella nena que pasó andando en bici y de lo que dijiste cuando la viste, algo así como «fua, esta pendeja de mierda». No sé por qué, pero esas pequeñas cosas tuyas, esas expresiones tan espontáneas y esa manera tan particular de ser, me hacían sonreír. Son detalles que quizás ni te imaginás, pero que a mí me encantaban y que, de alguna manera, también me fueron enamorando de vos.
+</p>
+
+<p>
+También me acuerdo de aquella salida a Rade, cuando pedimos ese vino blanco que tanto querías. Tomé tanto que después no paraba de decir pavada, y vos, con tu hermoso «ay, señor» (palabra de tu lenguaje que se me pegó), me retabas y me decías que dejara de decir pavada. Qué lindo es acordarme de esas cosas.
+</p>
+
+<p>
+Y hay un video que cada vez que miro me hace sonreír, ese en el que te agarrás de mí como una garrapata y yo te llevo. No sé por qué, pero ese recuerdo tiene algo que me hace especialmente feliz.
+</p>
+
+<p>
+Me acuerdo de nuestras juntadas acariciando a cada mich que encontrábamos, de aquella luciérnaga que agarraste con todo tu coraje mientras yo tenía miedo, y de tantas pequeñas cosas que quizás para otras personas no significarían demasiado, pero que para mí tienen un valor enorme.
+</p>
+
+<p>
+También me acuerdo de ese té de frutilla que todavía quiero probar. Sí, ya sé, probablemente te lo dije unas ocho veces, pero sigo teniendo esa curiosidad y me niego a probarlo solo, como también me niego a ver Harry Potter sin vos, aunque no lo creas.
+</p>
+
+<p>
+Y hay algo más que me trae muchísimos recuerdos, aquel corazoncito de <em>Un verano sin ti</em>, de Bad Bunny, que tenías en la funda y que me regalaste. No sé si alguna vez te diste cuenta de cuánto significaba para mí. Ahora que estamos tan cerca del verano, esa canción y ese corazón me hacen pensar inevitablemente en vos, y me sale de adentro esa frase que tantas veces pensé, no me imagino un verano sin ti.
+</p>
+
+<p>
+Porque cuando pienso en las cosas que me gustaría vivir, muchas veces aparecés vos.
+</p>
+
+<p>
+Me gustaría ir a bucear con vos, descubrir juntos ese mundo que todavía no conocemos, compartir la emoción de una aventura nueva y tener después miles de historias para recordar.
+</p>
+
+<p>
+Me gustaría conocer Estados Unidos y que vos también pudieras conocerlo, recorrer lugares, sacar fotografías, sorprendernos con cosas nuevas y disfrutar de esos pequeños momentos que, cuando se comparten con alguien especial, terminan convirtiéndose en recuerdos para toda la vida.
+</p>
+
+<p>
+No son solamente destinos o planes, son esas ganas de compartir la vida, de conocer lugares, de aprender cosas, de reírnos y de seguir descubriendo el mundo juntos.
+</p>
+
+<p>
+Y quiero ser sincero con vos, yo tengo muy claro lo que siento y lo que quiero. No es que esté buscando a alguien para ocupar un lugar vacío, ni que quiera compartir esos sueños con cualquier persona. Cuando imagino esas cosas, cuando pienso en esos viajes, esas aventuras y esos momentos, la persona que aparece en mi cabeza sos vos, Xio.
+</p>
+
+<p>
+No sé qué va a pasar con nosotros, no sé qué sentís hoy cuando pensás en mí, ni qué lugar ocupan nuestros recuerdos en tu corazón. Y entiendo que eso no depende solamente de mí.
+</p>
+
+<p>
+También sé que me equivoqué, que te lastimé y que hubo momentos en los que no respeté tus límites. Estuvo mal, y no quiero minimizarlo ni justificarlo. Lamento sinceramente haberte hecho daño, entiendo que mis acciones tuvieron consecuencias y que tenés derecho a decidir qué lugar querés que tenga en tu vida.
+</p>
+
+<p>
+Pero hoy no quiero que esta carta sea otra carta de lamentos, quiero que sea un regalo, un pequeño universo de recuerdos, palabras y sentimientos que preparé con mucho cariño.
+</p>
+
+<p>
+Por eso quise reunir algunos de ellos acá, no solamente para recordar lo que vivimos, sino también para darle un lugar especial a todas esas pequeñas cosas que alguna vez me hicieron feliz.
+</p>
+
+<p>
+Lo único que sé es que yo no me olvido de lo que vivimos, de lo que aprendí con vos ni de lo especial que fue conocerte.
+</p>
+
+<p>
+Y si algo quería que quedara guardado en estas páginas, es que hubo alguien que te quiso muchísimo, que encontró en vos cosas que le hicieron profundamente feliz y que todavía guarda con cariño muchos de esos momentos.
+</p>
+
+<p>
+Y bueno, después de todo, parece que esos seis años de electrónica y programación no fueron tan al pedo como pensaba, porque al final me terminaron sirviendo para programar este pequeño regalo para vos. Quién diría que iba a terminar usando todo eso para hacer una página llena de recuerdos y sentimientos, jajaja.
+</p>
+
+<p class="final">
+Todo esto lo hice con amor.<br><br>
+Y eso es lo que quería que supieras. ❤️
+</p>
+
+<div class="separador">♥ ♥ ♥</div>
+
+</div>
+</section>
+
+<script>
+let toques = 0;
+
+const boton = document.getElementById("corazon");
+const forma = document.getElementById("forma");
+const mensaje = document.getElementById("mensaje");
+const barra = document.getElementById("barra");
+const contador = document.getElementById("contador");
+const inicio = document.getElementById("inicio");
+const advertencia = document.getElementById("advertencia");
+const carta = document.getElementById("carta");
+const transicion = document.getElementById("transicion");
+const abrirCarta = document.getElementById("abrirCarta");
+
+const textos = [
+    "Cada recuerdo tiene algo especial...",
+    "Hay momentos que guardaría para siempre...",
+    "Algunas personas dejan huellas en el corazón...",
+    "Y hay sentimientos que merecen ser contados..."
+];
+
+boton.addEventListener("click", () => {
+
+    if (toques >= 4) return;
+
+    toques++;
+
+    forma.style.fill = [
+        "#bdbdbd",
+        "#dba0b8",
+        "#d7789e",
+        "#cb5484",
+        "#b52d69"
+    ][toques];
+
+    boton.style.transform = `scale(${1 + toques * 0.15})`;
+
+    barra.style.width = (toques * 25) + "%";
+    contador.textContent = toques + " de 4";
+    mensaje.textContent = textos[toques - 1];
+
+    if (toques === 4) {
+
+        setTimeout(() => {
+
+            boton.style.transform = "scale(15)";
+            transicion.classList.add("activa");
+
+            setTimeout(() => {
+
+                inicio.style.opacity = "0";
+                inicio.style.transform = "scale(0.9)";
+                inicio.style.display = "none";
+
+                advertencia.style.display = "flex";
+
+                requestAnimationFrame(() => {
+                    advertencia.classList.add("visible");
+                });
+
+                transicion.style.opacity = "0";
+
+            }, 900);
+
+        }, 500);
+    }
+});
+
+abrirCarta.addEventListener("click", () => {
+
+    advertencia.style.opacity = "0";
+    advertencia.style.transform = "translateY(-20px)";
+
+    setTimeout(() => {
+
+        advertencia.style.display = "none";
+        carta.style.display = "flex";
+
+        requestAnimationFrame(() => {
+            carta.classList.add("visible");
+        });
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+    }, 700);
+
+});
+const botonRecuerdos = document.createElement("button");
+
+botonRecuerdos.innerText = "Seguir explorando recuerdos ❤️";
+
+botonRecuerdos.style.cssText = `
+    padding: 15px 30px;
+    margin: 30px auto;
+    display: block;
+    background: #e75480;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-size: 18px;
+    cursor: pointer;
+`;
+
+botonRecuerdos.onclick = () => {
+    window.location.href = "galeria.html";
+};
+
+carta.appendChild(botonRecuerdos);
+</script>
+
+</body>
+</html>
